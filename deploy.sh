@@ -35,6 +35,7 @@ doc
 
 err() { echo "$@" >&2; usage; exit 1; }
 
+serverOriginal="$1"
 server="$1"
 [ -z "$server" ] && usage && exit 1
 if ! [[ $server =~ (\w+)?@([0-9.]+) ]]; then # extract from ssh config
@@ -93,10 +94,10 @@ if [ -f "$envFile" ]; then
   envFile=".env.tmp"
 fi
 cd ..
-tar -c $(test -e "$ignore" && echo "-X $ignore") -vzf "$base.tar.gz" "$base"
+tar -c --exclude=node_modules --exclude=.git $(test -e "$ignore" && echo "-X $ignore") -zvf "$base.tar.gz" "$base"
 [ -f "$base/$envFile" ] && rm "$base/$envFile"
 [ -f "$base/$composeFile" ] && rm "$base/$composeFile"
-scp "$base.tar.gz" "$server:$base.tar.gz"
+scp "$base.tar.gz" "$serverOriginal:$base.tar.gz"
 rm "$base.tar.gz"
 
 script="$(cat <<EOF
@@ -123,5 +124,4 @@ script="$(cat <<EOF
   [ $followLogs -ne 0 ] && docker-compose logs -f
 EOF
 )"
-ssh -q -t "$server" "$script"
-
+ssh -q -t "$serverOriginal" "$script"
