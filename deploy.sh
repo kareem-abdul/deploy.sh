@@ -91,7 +91,7 @@ else
 fi
 cd ..
 if [ -f "$envFile" ]; then
-  cp "$envFile" "$(pwd)/.env.tmp"
+  cp "$envFile" "$(pwd)/$base/.env.tmp"
   envFile=".env.tmp"
 fi
 tar -c --exclude=node_modules --exclude=.git $(test -e "$ignore" && echo "-X $ignore") -zvf "$base.tar.gz" "$base"
