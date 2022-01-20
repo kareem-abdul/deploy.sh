@@ -89,11 +89,11 @@ if [ -f "$composeFile" ]; then
 else
   err "docker compose file not found"
 fi
+cd ..
 if [ -f "$envFile" ]; then
   cp "$envFile" "$(pwd)/.env.tmp"
   envFile=".env.tmp"
 fi
-cd ..
 tar -c --exclude=node_modules --exclude=.git $(test -e "$ignore" && echo "-X $ignore") -zvf "$base.tar.gz" "$base"
 [ -f "$base/$envFile" ] && rm "$base/$envFile"
 [ -f "$base/$composeFile" ] && rm "$base/$composeFile"
