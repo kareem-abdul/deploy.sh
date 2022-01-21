@@ -81,7 +81,7 @@ done
 cd "$targetDir"
 base=$(basename "$PWD")
 [ -z "$ignore" ] && ignore="$base/.gitignore"
-[ -z "$envFile" ] && envFile="$base/.env"
+[ -z "$envFile" ] && envFile=".env"
 [ -z "$composeFile" ] && composeFile="docker-compose.yml";
 if [ -f "$composeFile" ]; then
   cp "$composeFile" "$(pwd)/docker-compose-tmp.yml"
@@ -90,6 +90,7 @@ else
   err "docker compose file not found"
 fi
 cd ..
+envFile="$base/$envFile"
 if [ -f "$envFile" ]; then
   cp "$envFile" "$(pwd)/$base/.env.tmp"
   envFile=".env.tmp"
